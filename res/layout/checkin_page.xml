@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/txt_shout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/input_shout"
+        android:inputType="textMultiLine"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip">
+
+        <requestFocus />
+    </EditText>
+
+    <CheckBox
+        android:id="@+id/sw_share_with_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_with_friends"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip" />
+
+    <CheckBox
+        android:id="@+id/sw_share_with_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_with_facebook"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip" />
+
+    <CheckBox
+        android:id="@+id/sw_share_with_twitter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_with_twitter"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip" />
+
+</LinearLayout>
