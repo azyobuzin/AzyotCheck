@@ -8,7 +8,10 @@ import net.azyobuzi.azyotcheck.util.StringUtil;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.app.Activity;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -21,12 +24,10 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-public class StartPageActivity extends Activity implements LocationListener {
+public class StartPageActivity extends SherlockActivity implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class StartPageActivity extends Activity implements LocationListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	this.menu = menu;
-    	getMenuInflater().inflate(R.menu.start_page_menu, menu);
+    	getSupportMenuInflater().inflate(R.menu.start_page_menu, menu);
     	refreshButtonsEnabled();
     	return true;
     }

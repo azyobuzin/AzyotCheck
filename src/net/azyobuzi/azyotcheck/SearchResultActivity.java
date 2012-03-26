@@ -10,26 +10,25 @@ import net.azyobuzi.azyotcheck.util.StringUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class SearchResultActivity extends Activity {
+public class SearchResultActivity extends SherlockActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-        	getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.search_result_page);
 
@@ -98,11 +97,9 @@ public class SearchResultActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			if (item.getItemId() == android.R.id.home) {
-				startActivity(new Intent(this, StartPageActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-				return true;
-			}
+		if (item.getItemId() == android.R.id.home) {
+			startActivity(new Intent(this, StartPageActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);

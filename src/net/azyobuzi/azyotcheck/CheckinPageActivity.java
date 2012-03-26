@@ -8,30 +8,29 @@ import net.azyobuzi.azyotcheck.util.StringUtil;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-public class CheckinPageActivity extends Activity {
+public class CheckinPageActivity extends SherlockActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-	        ActionBar ab = getActionBar();
-	        ab.setDisplayHomeAsUpEnabled(true);
-	        ab.setTitle(getIntent().getStringExtra("name"));
-        }
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setSubtitle(getIntent().getStringExtra("name"));
 
         setContentView(R.layout.checkin_page);
 
@@ -42,20 +41,16 @@ public class CheckinPageActivity extends Activity {
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.checkin_page_menu, menu);
+		getSupportMenuInflater().inflate(R.menu.checkin_page_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			if (item.getItemId() == android.R.id.home) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
 				finish();
 				return true;
-			}
-		}
-
-		switch (item.getItemId()) {
 			case R.id.checkin_menu:
 				final ProgressDialog dialog = new ProgressDialog(this);
 				dialog.setMessage(getText(R.string.being_checked_in));
