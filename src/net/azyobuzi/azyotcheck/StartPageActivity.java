@@ -23,6 +23,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -37,36 +38,37 @@ public class StartPageActivity extends SherlockActivity implements LocationListe
         setContentView(R.layout.start_page);
         refreshButtonsEnabled();
 
-        View.OnClickListener buttonClickListener = new View.OnClickListener() {
-        	@Override
-			public void onClick(View arg0) {
-        		if (arg0.getId() == R.id.btn_search_with_place_name) {
-        			final View inputView = LayoutInflater.from(StartPageActivity.this)
-        					.inflate(R.layout.input_place_name_dialog, null);
-        			new AlertDialog.Builder(StartPageActivity.this)
-        				.setTitle(R.string.input_place_name)
-        				.setView(inputView)
-        				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								placeNameQuery = ((EditText)inputView.findViewById(R.id.txt_place_name)).getText().toString();
-								getLocation();
-							}
-        				})
-        				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-        				})
-        				.show();
-        		} else {
-        			getLocation();
-        		}
-			}
-        };
         findViewById(R.id.btn_search_with_here).setOnClickListener(buttonClickListener);
         findViewById(R.id.btn_search_with_place_name).setOnClickListener(buttonClickListener);
     }
+    
+    private final View.OnClickListener buttonClickListener = new View.OnClickListener() {
+    	@Override
+		public void onClick(View arg0) {
+    		if (arg0.getId() == R.id.btn_search_with_place_name) {
+    			final View inputView = LayoutInflater.from(StartPageActivity.this)
+    					.inflate(R.layout.input_place_name_dialog, null);
+    			new AlertDialog.Builder(StartPageActivity.this)
+    				.setTitle(R.string.input_place_name)
+    				.setView(inputView)
+    				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							placeNameQuery = ((EditText)inputView.findViewById(R.id.txt_place_name)).getText().toString();
+							getLocation();
+						}
+    				})
+    				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+    				})
+    				.show();
+    		} else {
+    			getLocation();
+    		}
+		}
+    };
 
     private LocationManager locMng;
     private Location latestLocation;
@@ -139,6 +141,16 @@ public class StartPageActivity extends SherlockActivity implements LocationListe
 	    		enabled ? R.string.logout : R.string.login
 	    	);
     	}
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+    	if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
+    		buttonClickListener.onClick(findViewById(R.id.btn_search_with_place_name));
+    		return true;
+    	}
+    	
+    	return super.dispatchKeyEvent(event);
     }
 
     private String placeNameQuery;

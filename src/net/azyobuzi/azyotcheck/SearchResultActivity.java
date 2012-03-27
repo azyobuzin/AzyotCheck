@@ -61,9 +61,9 @@ public class SearchResultActivity extends SherlockActivity {
         	lv.setAdapter(new SimpleAdapter(
         		this,
         		venues,
-        		R.layout.venue_item,
+        		android.R.layout.simple_list_item_2,
         		new String[] { "name", "address" },
-        		new int[] { R.id.tv_venue_name, R.id.tv_address }
+        		new int[] { android.R.id.text1, android.R.id.text2 }
         	));
         } catch (Exception ex) {
         	new AlertDialog.Builder(this)
