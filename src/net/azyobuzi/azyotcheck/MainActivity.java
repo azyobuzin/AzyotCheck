@@ -1,5 +1,11 @@
 package net.azyobuzi.azyotcheck;
 
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+
+import net.azyobuzi.azyotcheck.foursquare.FoursquareAQuery;
+import net.azyobuzi.azyotcheck.foursquare.FoursquareResponse;
+import net.azyobuzi.azyotcheck.foursquare.User;
 import net.azyobuzi.azyotcheck.util.StringUtil;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -35,11 +41,16 @@ public class MainActivity extends FragmentActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    
+    FoursquareAQuery aq;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        aq = new FoursquareAQuery(this);
+        
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -52,6 +63,14 @@ public class MainActivity extends FragmentActivity {
         if (StringUtil.isNullOrEmpty(Setting.getAccessToken())) {
         	AuthorizeActivity.startAuth();
         }
+        
+        //test
+        aq.foursquareGetSelfInformation(new AjaxCallback<FoursquareResponse<User>>() {
+        	@Override
+        	public void callback(String url, FoursquareResponse<User> object, AjaxStatus status) {
+        		int dummy = 0;
+        	}
+        });
     }
 
     @Override

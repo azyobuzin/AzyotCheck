@@ -1,10 +1,17 @@
 package net.azyobuzi.azyotcheck.foursquare;
 
+import java.io.Serializable;
+
 import net.vvakame.util.jsonpullparser.annotation.JsonKey;
 import net.vvakame.util.jsonpullparser.annotation.JsonModel;
 
 @JsonModel(treatUnknownKeyAsError = false)
-public class Meta {
+public class Meta implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4099844877257942222L;
+	
 	@JsonKey
 	int code;
 	

@@ -1,6 +1,7 @@
 package net.azyobuzi.azyotcheck.foursquare;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import net.vvakame.util.jsonpullparser.JsonFormatException;
@@ -9,7 +10,12 @@ import net.vvakame.util.jsonpullparser.annotation.JsonModel;
 import net.vvakame.util.jsonpullparser.util.JsonArray;
 
 @JsonModel(treatUnknownKeyAsError = false)
-public class Venue {
+public class Venue implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6314527886278817801L;
+	
 	@JsonKey
 	String id;
 	
