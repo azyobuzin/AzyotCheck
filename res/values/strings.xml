@@ -12,5 +12,6 @@
     <string name="couldnt_find">Couldn\'t find</string>
     <string name="my_location">My Location</string>
     <string name="history">History</string>
+    <string name="cant_get_location">Cannot get location. Turn on location service.</string>
 
 </resources>

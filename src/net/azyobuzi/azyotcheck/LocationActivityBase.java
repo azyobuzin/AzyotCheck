@@ -1,7 +1,11 @@
 package net.azyobuzi.azyotcheck;
 
+import net.azyobuzi.azyotcheck.util.StringUtil;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,7 +22,6 @@ public abstract class LocationActivityBase extends SherlockFragmentActivity impl
 		super.onCreate(arg0);
 		
 		locMng = (LocationManager)getSystemService(LOCATION_SERVICE);
-		//TODO: 位置情報サービスが無効の時の処理
 	}
 	
 	@Override
@@ -43,7 +46,20 @@ public abstract class LocationActivityBase extends SherlockFragmentActivity impl
 		criteria.setBearingRequired(false);
 		criteria.setSpeedRequired(false);
 		String provider = locMng.getBestProvider(criteria, true);
-		locMng.requestLocationUpdates(provider, 30 * 1000, 5, this);
+		
+		if (StringUtil.isNullOrEmpty(provider)) {
+			new AlertDialog.Builder(this)
+				.setTitle(android.R.string.dialog_alert_title)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setMessage(R.string.cant_get_location)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) { }
+				})
+				.show();
+		} else {
+			locMng.requestLocationUpdates(provider, 30 * 1000, 5, this);
+		}
 	}
 	
 	@Override
