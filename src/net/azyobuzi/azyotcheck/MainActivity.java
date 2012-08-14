@@ -1,8 +1,13 @@
 package net.azyobuzi.azyotcheck;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.actionbarsherlock.view.Menu;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 
+import net.azyobuzi.azyotcheck.foursquare.Checkin;
 import net.azyobuzi.azyotcheck.foursquare.FoursquareAQuery;
 import net.azyobuzi.azyotcheck.foursquare.FoursquareResponse;
 import net.azyobuzi.azyotcheck.foursquare.User;
@@ -11,6 +16,7 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,13 +27,11 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends LocationActivityBase {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
@@ -35,14 +39,14 @@ public class MainActivity extends FragmentActivity {
      * keep every loaded fragment in memory. If this becomes too memory intensive, it may be best
      * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
     
-    FoursquareAQuery aq;
+    private FoursquareAQuery aq;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,28 +59,36 @@ public class MainActivity extends FragmentActivity {
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(1);
 
         if (StringUtil.isNullOrEmpty(Setting.getAccessToken())) {
         	AuthorizeActivity.startAuth();
         }
         
         //test
-        aq.foursquareGetSelfInformation(new AjaxCallback<FoursquareResponse<User>>() {
-        	@Override
-        	public void callback(String url, FoursquareResponse<User> object, AjaxStatus status) {
-        		int dummy = 0;
-        	}
-        });
+        /*aq.oauthToken(Setting.getAccessToken())
+        	.foursquareGetSelfCheckins(2, new AjaxCallback<FoursquareResponse<List<Checkin>>>() {
+	        	@Override
+	        	public void callback(String url, FoursquareResponse<List<Checkin>> object, AjaxStatus status) {
+	        		int dummy = 0;
+	        	}
+	        });*/
+    }
+    
+    @Override
+    public void onLocationUpdate(Location location) {
+    	for (VenueListFragment f : mSectionsPagerAdapter.fragments) {
+    		f.setLocation(location);
+    	}
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+    	getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+    	return true;
     }
 
     @Override
@@ -90,41 +102,37 @@ public class MainActivity extends FragmentActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
      * sections of the app.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {//TODO:改名
+    	public final ArrayList<VenueListFragment> fragments = new ArrayList<VenueListFragment>();
+    	
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            
+            fragments.add(new HistoryVenueListFragment());
+            fragments.add(new MyLocationVenueListFragment());
         }
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
-            fragment.setArguments(args);
-            return fragment;
+            return fragments.get(i);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return fragments.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0: return getString(R.string.title_section1).toUpperCase();
-                case 1: return getString(R.string.title_section2).toUpperCase();
-                case 2: return getString(R.string.title_section3).toUpperCase();
-            }
-            return null;
+            VenueListFragment f = fragments.get(position);
+            return f != null ? f.getTitle() : null;
         }
     }
 
     /**
      * A dummy fragment representing a section of the app, but that simply displays dummy text.
      */
-    public static class DummySectionFragment extends Fragment {
+    /*public static class DummySectionFragment extends Fragment {
         public DummySectionFragment() {
         }
 
@@ -139,5 +147,5 @@ public class MainActivity extends FragmentActivity {
             textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
             return textView;
         }
-    }
+    }*/
 }

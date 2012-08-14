@@ -8,5 +8,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">@string/app_name</string>
+    <string name="category">Category</string>
+    <string name="couldnt_find">Couldn\'t find</string>
+    <string name="my_location">My Location</string>
+    <string name="history">History</string>
 
 </resources>

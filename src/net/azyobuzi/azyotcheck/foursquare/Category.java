@@ -66,4 +66,15 @@ public class Category implements Serializable {
 	public void setIcon(Image value) {
 		icon = value;
 	}
+	
+	@JsonKey
+	boolean primary;
+	
+	public boolean getPrimary() {
+		return primary;
+	}
+	
+	public void setPrimary(boolean value) {
+		primary = value;
+	}
 }

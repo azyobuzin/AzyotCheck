@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import net.vvakame.util.jsonpullparser.annotation.JsonKey;
 import net.vvakame.util.jsonpullparser.annotation.JsonModel;
+import net.vvakame.util.jsonpullparser.util.JsonArray;
 import net.vvakame.util.jsonpullparser.util.JsonHash;
 
 @JsonModel(treatUnknownKeyAsError = false)
@@ -25,13 +26,13 @@ public class Response implements Serializable {
 	}
 	
 	@JsonKey
-	JsonHash notifications;
+	JsonArray notifications;
 	
-	public JsonHash getNotifications() {
+	public JsonArray getNotifications() {
 		return notifications;
 	}
 	
-	public void setNotifications(JsonHash value) {
+	public void setNotifications(JsonArray value) {
 		notifications = value;
 	}
 	
@@ -43,6 +44,6 @@ public class Response implements Serializable {
 	}
 	
 	public void setResponse(JsonHash value) {
-		notifications = value;
+		response = value;
 	}
 }

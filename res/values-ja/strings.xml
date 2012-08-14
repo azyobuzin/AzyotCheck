@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AzyotCheck</string>
+    <string name="category">カテゴリー</string>
+    <string name="couldnt_find">見つかりませんでした</string>
+    <string name="my_location">現在地</string>
+    <string name="history">履歴</string>
 </resources>
