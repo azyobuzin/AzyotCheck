@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public abstract class VenueListFragment extends SherlockListFragment {
+	private static final String LOCATION = "net.azyobuzi.azyotcheck.VenueListFragment.LOCATION";
+	private static final String RESULT = "net.azyobuzi.azyotcheck.VenueListFragment.RESULT";
+	
 	protected FoursquareAQuery aq;
 	
 	@Override
@@ -31,6 +34,7 @@ public abstract class VenueListFragment extends SherlockListFragment {
 		return view;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -38,8 +42,21 @@ public abstract class VenueListFragment extends SherlockListFragment {
 		adapter = new VenueAdapter();
 		setListAdapter(adapter);
 		
-		if (!useLocation())
+		if (savedInstanceState != null) {
+			location = savedInstanceState.getParcelable(LOCATION);
+			adapter.venues.addAll((ArrayList<Venue>)savedInstanceState.getSerializable(RESULT));
+		}
+		
+		if (location != null || !useLocation())
 			startLoad();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable(LOCATION, getLocation());
+		outState.putSerializable(RESULT, adapter.venues);
+
+		super.onSaveInstanceState(outState);
 	}
 	
 	private VenueAdapter adapter;
@@ -147,7 +164,7 @@ public abstract class VenueListFragment extends SherlockListFragment {
 					break;
 				}
 			}
-			new AQuery(vh.category).image(categoryImg, true, true);
+			new AQuery(vh.category).image(categoryImg, true, false);
 
 			new AQuery(vh.name).text(item.getName());
 			

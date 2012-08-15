@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 
@@ -13,8 +14,10 @@ import net.azyobuzi.azyotcheck.foursquare.FoursquareResponse;
 import net.azyobuzi.azyotcheck.foursquare.User;
 import net.azyobuzi.azyotcheck.util.StringUtil;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -26,9 +29,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends LocationActivityBase {
@@ -78,8 +83,11 @@ public class MainActivity extends LocationActivityBase {
 	        });*/
     }
     
+    private Location currentLocation;
+    
     @Override
     public void onLocationUpdate(Location location) {
+    	currentLocation = location;
     	for (VenueListFragment f : mSectionsPagerAdapter.fragments) {
     		f.setLocation(location);
     	}
@@ -90,11 +98,56 @@ public class MainActivity extends LocationActivityBase {
     	getSupportMenuInflater().inflate(R.menu.activity_main, menu);
     	return true;
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    		case R.id.menu_activity_main_search:
+    			search();
+    			return true;
+    		default:
+    	    	return super.onOptionsItemSelected(item);
+    	}
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	outState = new Bundle();
     	super.onSaveInstanceState(outState);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+    	if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
+    		search();
+    		return true;
+    	}
+    	
+    	return super.dispatchKeyEvent(event);
+    }
+    
+    private void search() {
+    	final EditText editText = new EditText(this);
+    	new AlertDialog.Builder(this)
+    		.setTitle(android.R.string.search_go)
+    		.setView(editText)
+    		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					SearchVenueListFragment f = SearchVenueListFragment.newInstance(editText.getText().toString());
+					mSectionsPagerAdapter.fragments.add(f);
+					mSectionsPagerAdapter.notifyDataSetChanged();
+					mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount() - 1, true);
+					
+					if (currentLocation != null)
+						f.setLocation(currentLocation);
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) { }
+			})
+			.show();
     }
 
 
