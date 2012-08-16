@@ -152,6 +152,7 @@ public abstract class VenueListFragment extends SherlockListFragment {
 				vh.category = aq.id(R.id.iv_venue_item_category).getImageView();
 				vh.name = aq.id(R.id.tv_venue_item_name).getTextView();
 				vh.location = aq.id(R.id.tv_venue_item_location).getTextView();
+				view.setTag(vh);
 			}
 			
 			Venue item = getVenue(arg0);
@@ -164,7 +165,7 @@ public abstract class VenueListFragment extends SherlockListFragment {
 					break;
 				}
 			}
-			new AQuery(vh.category).image(categoryImg, true, false);
+			new AQuery(vh.category).image(categoryImg, true, true);
 
 			new AQuery(vh.name).text(item.getName());
 			
